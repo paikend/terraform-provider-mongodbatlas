@@ -151,6 +151,40 @@ func TestAccResourceMongoDBAtlasProject_withUpdatedRole(t *testing.T) {
 	})
 }
 
+func TestAccResourceMongoDBAtlasProject_withUpdatedName(t *testing.T) {
+	var (
+		resourceName       = "mongodbatlas_project.test"
+		projectName        = fmt.Sprintf("testacc-project-%s", acctest.RandString(10))
+		orgID              = os.Getenv("MONGODB_ATLAS_ORG_ID")
+		clusterCount       = "0"
+		updatedProjectName = fmt.Sprintf("%s-updated", projectName)
+	)
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories: testAccProviderFactories,
+		CheckDestroy:      testAccCheckMongoDBAtlasProjectDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccMongoDBAtlasProjectConfig(projectName, orgID, nil),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceName, "name", projectName),
+					resource.TestCheckResourceAttr(resourceName, "org_id", orgID),
+					resource.TestCheckResourceAttr(resourceName, "cluster_count", clusterCount),
+				),
+			},
+			{
+				Config: testAccMongoDBAtlasProjectConfig(updatedProjectName, orgID, nil),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceName, "name", updatedProjectName),
+					resource.TestCheckResourceAttr(resourceName, "org_id", orgID),
+					resource.TestCheckResourceAttr(resourceName, "cluster_count", clusterCount),
+				),
+			},
+		},
+	})
+}
+
 func TestAccResourceMongoDBAtlasProject_importBasic(t *testing.T) {
 	var (
 		projectName  = fmt.Sprintf("test-acc-%s", acctest.RandString(10))
