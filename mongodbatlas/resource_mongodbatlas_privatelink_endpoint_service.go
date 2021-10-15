@@ -163,7 +163,7 @@ func resourceMongoDBAtlasPrivateEndpointServiceLinkRead(ctx context.Context, d *
 		return diag.FromErr(fmt.Errorf(errorEndpointSetting, "aws_connection_status", endpointServiceID, err))
 	}
 
-	if err := d.Set("azure_status", privateEndpoint.AzureStatus); err != nil {
+	if err := d.Set("azure_status", privateEndpoint.Status); err != nil {
 		return diag.FromErr(fmt.Errorf(errorEndpointSetting, "azure_status", endpointServiceID, err))
 	}
 
@@ -280,10 +280,10 @@ func resourceServiceEndpointRefreshFunc(ctx context.Context, client *matlas.Clie
 		}
 
 		if strings.EqualFold(providerName, "azure") {
-			if i.AzureStatus != "AVAILABLE" {
-				return "", i.AzureStatus, nil
+			if i.Status != "AVAILABLE" {
+				return "", i.Status, nil
 			}
-			return i, i.AzureStatus, nil
+			return i, i.Status, nil
 		}
 		if i.AWSConnectionStatus != "AVAILABLE" {
 			return "", i.AWSConnectionStatus, nil

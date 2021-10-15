@@ -95,7 +95,7 @@ func dataSourceMongoDBAtlasPrivateEndpointServiceLinkRead(ctx context.Context, d
 		return diag.FromErr(fmt.Errorf(errorEndpointSetting, "aws_connection_status", endpointServiceID, err))
 	}
 
-	if err := d.Set("azure_status", serviceEndpoint.AzureStatus); err != nil {
+	if err := d.Set("azure_status", serviceEndpoint.Status); err != nil {
 		return diag.FromErr(fmt.Errorf(errorEndpointSetting, "azure_status", endpointServiceID, err))
 	}
 
